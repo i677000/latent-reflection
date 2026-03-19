@@ -1,6 +1,6 @@
 # Black (Latent Reflection)
 
-Local-network art installation that renders short reflective phrases on a phone as a passive display object.
+Local-network art installation that renders short reflective phrases on a web page fora passive display object.
 
 ## What it is
 - A local LLM generates short phrases
