@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: qwen2.5:1.5b
+      PROMPT_PATH: /app/prompt.txt
+      FALLBACK_PATH: /app/fallback.txt
+      LAST_PHRASE_MAX_AGE_SEC: "3600"
+      HOLD_MS: "7000"
+      PAUSE_MS: "2500"
+    volumes:
+      - ./backend/prompt.txt:/app/prompt.txt:ro
+      - ./backend/fallback.txt:/app/fallback.txt:ro
+    depends_on:
+      - ollama
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  ollama_data:
